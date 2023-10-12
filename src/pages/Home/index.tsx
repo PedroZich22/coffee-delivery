@@ -1,3 +1,14 @@
+import { Intro } from "./components/Intro";
+import { CoffeeListContainer } from "./style";
+
 export function Home() {
-  return <h1>Home</h1>;
+  return (
+    <div>
+      <Intro />
+      <CoffeeListContainer>
+        <h1>Nossos Cafés</h1>
+        <div></div>
+      </CoffeeListContainer>
+    </div>
+  );
 }
