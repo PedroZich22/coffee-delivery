@@ -1,15 +1,15 @@
-import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
+import { ShoppingCartSimple } from "phosphor-react";
 import {
   BuyButton,
   BuyButtonContainer,
   BuyContainer,
   CoffeeCardContainer,
   CoffeePrice,
-  Counter,
   Tag,
   TagsContainer,
 } from "./styles";
 import coffeeImg from "../../../../assets/coffees/americano.png";
+import { Counter } from "../../../../components/Counter";
 
 export function CoffeeCard() {
   return (
@@ -25,15 +25,7 @@ export function CoffeeCard() {
           R$ <strong>9,90</strong>
         </CoffeePrice>
         <BuyButtonContainer>
-          <Counter>
-            <button>
-              <Minus weight="fill" />
-            </button>
-            <span>0</span>
-            <button>
-              <Plus weight="fill" />
-            </button>
-          </Counter>
+          <Counter />
           <BuyButton>
             <ShoppingCartSimple size={22} weight="fill" />
           </BuyButton>

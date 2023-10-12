@@ -12,6 +12,10 @@ export const Nav = styled.nav`
   align-items: center;
 
   background: ${(props) => props.theme["base-background"]};
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 export const Actions = styled.div`
