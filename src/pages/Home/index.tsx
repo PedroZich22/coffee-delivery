@@ -1,5 +1,6 @@
+import { CoffeeCard } from "./components/CoffeeCard";
 import { Intro } from "./components/Intro";
-import { CoffeeListContainer } from "./style";
+import { CoffeeListContainer, ListCoffee } from "./style";
 
 export function Home() {
   return (
@@ -7,7 +8,9 @@ export function Home() {
       <Intro />
       <CoffeeListContainer>
         <h1>Nossos Cafés</h1>
-        <div></div>
+        <ListCoffee>
+          <CoffeeCard />
+        </ListCoffee>
       </CoffeeListContainer>
     </div>
   );

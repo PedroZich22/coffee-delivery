@@ -19,3 +19,9 @@ export const CoffeeListContainer = styled.main`
     line-height: 130%; /* 2.6rem */
   }
 `;
+
+export const ListCoffee = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+`;
