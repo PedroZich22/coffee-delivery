@@ -8,27 +8,47 @@ import {
   Tag,
   TagsContainer,
 } from "./styles";
-import coffeeImg from "../../../../assets/coffees/americano.png";
 import { Counter } from "../../../../components/Counter";
+import { Link } from "react-router-dom";
 
-export function CoffeeCard() {
+type CoffeeCardProps = {
+  coffee: {
+    id: number;
+    name: string;
+    description: string;
+    tags: string[];
+    price: number;
+    image: string;
+  };
+};
+
+export function CoffeeCard({ coffee }: CoffeeCardProps) {
+  const priceFormatted = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(coffee.price);
+
   return (
     <CoffeeCardContainer>
-      <img src={coffeeImg} alt="" />
+      <img src={coffee.image} alt="" />
       <TagsContainer>
-        <Tag>Tradicional</Tag>
+        {coffee.tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
       </TagsContainer>
-      <h2>Expresso Tradicional</h2>
-      <p>O tradicional café feito com água quente e grãos moídos</p>
+      <h2>{coffee.name}</h2>
+      <p>{coffee.description}</p>
       <BuyContainer>
         <CoffeePrice>
-          R$ <strong>9,90</strong>
+          <strong>{priceFormatted}</strong>
         </CoffeePrice>
         <BuyButtonContainer>
-          <Counter />
-          <BuyButton>
-            <ShoppingCartSimple size={22} weight="fill" />
-          </BuyButton>
+          <Counter coffee={coffee} />
+          <Link to="/checkout">
+            <BuyButton>
+              <ShoppingCartSimple size={22} weight="fill" />
+            </BuyButton>
+          </Link>
         </BuyButtonContainer>
       </BuyContainer>
     </CoffeeCardContainer>

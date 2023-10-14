@@ -4,6 +4,7 @@ export const CoffeeCardContainer = styled.div`
   width: 16rem;
   height: 19.375rem;
   flex-shrink: 0;
+  margin-top: 2rem;
 
   border-radius: 0.375rem 2.25rem;
   background: ${(props) => props.theme["base-card"]};

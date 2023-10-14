@@ -51,6 +51,7 @@ export const Location = styled.div`
 `;
 
 export const Cart = styled.div`
+  position: relative;
   display: flex;
   padding: 0.5rem;
   justify-content: center;
@@ -60,4 +61,29 @@ export const Cart = styled.div`
   border-radius: 0.375rem;
   background: ${(props) => props.theme["brand-yellow-light"]};
   color: ${(props) => props.theme["brand-yellow"]};
+`;
+
+export const CartCount = styled.span`
+  display: flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  right: -0.52156rem;
+  top: -0.5rem;
+
+  border-radius: 62.5rem;
+  background: ${(props) => props.theme["brand-yellow-dark"]};
+
+  color: ${(props) => props.theme["base-white"]};
+
+  /* Text/Bold S */
+  font-family: Roboto;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 130%; /* 0.975rem */
+  letter-spacing: -0.045rem;
 `;

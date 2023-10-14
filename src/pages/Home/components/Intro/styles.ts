@@ -14,11 +14,21 @@ export const IntroContainer = styled.section`
   align-items: center;
   justify-content: space-between;
 
-  @media (max-width: 768px) {
+  border-bottom: 4px solid ${(props) => props.theme["base-white"]};
+
+  @media (max-width: 1024px) {
     flex-direction: column;
     height: 100%;
-    padding: 0 2rem;
+    align-items: center;
+    padding: 0 5rem;
     justify-content: center;
+
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+
+    img {
+      display: none;
+    }
   }
 `;
 
@@ -59,6 +69,11 @@ export const ItemsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 `;
 
 export const Item = styled.div`

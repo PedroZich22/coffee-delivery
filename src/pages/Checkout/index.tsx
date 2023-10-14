@@ -4,7 +4,6 @@ import {
   CurrencyDollar,
   MapPin,
   Money,
-  Trash,
 } from "phosphor-react";
 import {
   CheckoutContainer,
@@ -13,26 +12,15 @@ import {
   CheckoutFormRow,
   CheckoutFormRowCity,
   CheckoutFormTitle,
-  ConfirmButton,
-  Divider,
   Frame1,
   Frame2,
   PaymentContainer,
-  PriceContainer,
-  PriceRow,
-  PriceRowTotal,
-  RemoveCoffeeButton,
-  SelectedCoffee,
-  SelectedCoffeeActions,
   SelectedCoffeeContainer,
-  SelectedCoffeeDetails,
-  SelectedCoffeeInfo,
   TransactionType,
   TransactionTypeButton,
 } from "./styles";
-import { Counter } from "../../components/Counter";
 
-import coffeeImg from "../../assets/coffees/americano.png";
+import { SelectedCoffees } from "./components/SelectedCoffees";
 
 export function Checkout() {
   return (
@@ -102,65 +90,11 @@ export function Checkout() {
           </CheckoutForm>
         </PaymentContainer>
       </Frame1>
+
       <Frame2>
         <h1>Cafés selecionados</h1>
         <SelectedCoffeeContainer>
-          <SelectedCoffee>
-            <SelectedCoffeeInfo>
-              <img src={coffeeImg} alt="" />
-              <SelectedCoffeeDetails>
-                <span>Expresso Tradicional</span>
-                <SelectedCoffeeActions>
-                  <Counter />
-                  <RemoveCoffeeButton>
-                    <Trash size={22} />
-                    remover
-                  </RemoveCoffeeButton>
-                </SelectedCoffeeActions>
-              </SelectedCoffeeDetails>
-            </SelectedCoffeeInfo>
-
-            <strong>R$ 9,90</strong>
-          </SelectedCoffee>
-
-          <Divider />
-
-          <SelectedCoffee>
-            <SelectedCoffeeInfo>
-              <img src={coffeeImg} alt="" />
-              <SelectedCoffeeDetails>
-                <span>Expresso Tradicional</span>
-                <SelectedCoffeeActions>
-                  <Counter />
-                  <RemoveCoffeeButton>
-                    <Trash size={22} />
-                    remover
-                  </RemoveCoffeeButton>
-                </SelectedCoffeeActions>
-              </SelectedCoffeeDetails>
-            </SelectedCoffeeInfo>
-
-            <strong>R$ 9,90</strong>
-          </SelectedCoffee>
-
-          <Divider />
-
-          <PriceContainer>
-            <PriceRow>
-              <span>Total de itens</span>
-              <strong>R$ 19,80</strong>
-            </PriceRow>
-            <PriceRow>
-              <span>Entrega</span>
-              <strong>R$ 5,00</strong>
-            </PriceRow>
-            <PriceRowTotal>
-              <span>Total</span>
-              <strong>R$ 24,80</strong>
-            </PriceRowTotal>
-
-            <ConfirmButton type="submit">Confirmar pedido</ConfirmButton>
-          </PriceContainer>
+          <SelectedCoffees />
         </SelectedCoffeeContainer>
       </Frame2>
     </CheckoutContainer>
