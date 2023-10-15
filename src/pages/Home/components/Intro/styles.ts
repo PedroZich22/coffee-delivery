@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import backgroundImg from "../../../../assets/Background.png";
+import backgroundImg from "/Background.png";
 
 export const IntroContainer = styled.section`
   max-width: 100%;

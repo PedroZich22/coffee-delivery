@@ -21,7 +21,11 @@ interface SelectedCoffeeFiltered {
   quantity: number;
 }
 
-export function SelectedCoffees() {
+interface SelectedCoffeesProps {
+  isValid: boolean;
+}
+
+export function SelectedCoffees({ isValid }: SelectedCoffeesProps) {
   const { selectedCoffees, handleRemoveAllCoffeesFromCart, coffees } =
     useContext(CoffeesContext);
 
@@ -125,7 +129,9 @@ export function SelectedCoffees() {
           <strong>{totalPrice}</strong>
         </PriceRowTotal>
 
-        <ConfirmButton type="submit">Confirmar pedido</ConfirmButton>
+        <ConfirmButton disabled={isValid} form="checkout-form" type="submit">
+          Confirmar pedido
+        </ConfirmButton>
       </PriceContainer>
     </>
   );

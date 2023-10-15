@@ -20,9 +20,40 @@ import {
   TransactionTypeButton,
 } from "./styles";
 
+import * as zod from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SelectedCoffees } from "./components/SelectedCoffees";
+import { useForm } from "react-hook-form";
+
+const CheckoutFormSchema = zod.object({
+  cep: zod.string().min(8, "CEP inválido"),
+  street: zod.string().nonempty("Rua inválida"),
+  number: zod.string(),
+  complement: zod.string(),
+  neighborhood: zod.string().nonempty("Bairro inválido"),
+  city: zod.string().nonempty("Cidade inválida"),
+  state: zod.string().nonempty("UF inválido"),
+  payment: zod.string().nonempty("Selecione uma forma de pagamento"),
+});
+
+type CheckoutFormData = zod.infer<typeof CheckoutFormSchema>;
 
 export function Checkout() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isValid },
+  } = useForm<CheckoutFormData>({
+    resolver: zodResolver(CheckoutFormSchema),
+  });
+
+  function handleCheckout(data: CheckoutFormData) {
+    console.log(data);
+
+    reset();
+  }
+
   return (
     <CheckoutContainer>
       <Frame1>
@@ -36,14 +67,37 @@ export function Checkout() {
             </div>
           </CheckoutFormTitle>
 
-          <CheckoutForm>
-            <input required type="text" id="cep" placeholder="CEP" />
-            <input required type="text" id="street" placeholder="Rua" />
+          <CheckoutForm
+            id="checkout-form"
+            onSubmit={handleSubmit(handleCheckout)}
+          >
+            <input
+              required
+              type="text"
+              id="cep"
+              placeholder="CEP"
+              {...register("cep")}
+            />
+            <input
+              required
+              type="text"
+              id="street"
+              placeholder="Rua"
+              {...register("street")}
+            />
 
             <CheckoutFormRow>
-              <input required type="text" id="number" placeholder="Número" />
+              <input
+                placeholder="Número"
+                {...register("number")}
+              />
 
-              <input type="text" id="complement" placeholder="Complemento" />
+              <input
+                type="text"
+                id="complement"
+                placeholder="Complemento"
+                {...register("complement")}
+              />
             </CheckoutFormRow>
 
             <CheckoutFormRowCity>
@@ -52,11 +106,24 @@ export function Checkout() {
                 type="text"
                 id="neighborhood"
                 placeholder="Bairro"
+                {...register("neighborhood")}
               />
 
-              <input required type="text" id="city" placeholder="Cidade" />
+              <input
+                required
+                type="text"
+                id="city"
+                placeholder="Cidade"
+                {...register("city")}
+              />
 
-              <input required type="text" id="state" placeholder="UF" />
+              <input
+                required
+                type="text"
+                id="state"
+                placeholder="UF"
+                {...register("state")}
+              />
             </CheckoutFormRowCity>
           </CheckoutForm>
         </CheckoutFormContainer>
@@ -73,7 +140,7 @@ export function Checkout() {
           </CheckoutFormTitle>
 
           <CheckoutForm>
-            <TransactionType>
+            <TransactionType {...register("payment")}>
               <TransactionTypeButton value="credit-card">
                 <CreditCard size={22} />
                 Cartão de crédito
@@ -94,7 +161,7 @@ export function Checkout() {
       <Frame2>
         <h1>Cafés selecionados</h1>
         <SelectedCoffeeContainer>
-          <SelectedCoffees />
+          <SelectedCoffees isValid={isValid} />
         </SelectedCoffeeContainer>
       </Frame2>
     </CheckoutContainer>

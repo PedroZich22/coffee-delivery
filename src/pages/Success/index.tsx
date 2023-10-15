@@ -1,5 +1,5 @@
 import { CurrencyDollar, MapPin, Timer } from "phosphor-react";
-import illustrationImg from "../../assets/illustration.svg";
+import illustrationImg from "/illustration.svg";
 import {
   ItemIcon,
   OrderInfo,

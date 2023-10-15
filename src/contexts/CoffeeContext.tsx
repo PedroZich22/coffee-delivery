@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import coffeesData from "../utils/coffees.json";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type CoffeesContextProviderProps = {
   children: React.ReactNode;
@@ -34,7 +35,11 @@ export function CoffeesContextProvider({
   children,
 }: CoffeesContextProviderProps) {
   const [coffees, setCoffees] = useState<Coffee[]>([]);
-  const [selectedCoffees, setSelectedCoffees] = useState<SelectedCoffee[]>([]);
+
+  const [selectedCoffees, setSelectedCoffees] = useLocalStorage<
+    SelectedCoffee[]
+  >("@coffee-delivery", []);
+
   const [quantity, setQuantity] = useState(0);
 
   function handleAddCoffeeToCart(id: number) {
@@ -60,11 +65,6 @@ export function CoffeesContextProvider({
         },
       ]);
     }
-
-    localStorage.setItem(
-      "@coffeehub:selectedCoffees",
-      JSON.stringify(selectedCoffees)
-    );
   }
 
   function handleRemoveCoffeeFromCart(id: number) {
@@ -88,11 +88,6 @@ export function CoffeesContextProvider({
 
       setSelectedCoffees(updatedCoffee);
     }
-
-    localStorage.setItem(
-      "@coffeehub:selectedCoffees",
-      JSON.stringify(selectedCoffees)
-    );
   }
 
   function handleRemoveAllCoffeesFromCart(id: number) {
@@ -105,11 +100,6 @@ export function CoffeesContextProvider({
 
       setSelectedCoffees(updatedCoffee);
     }
-
-    localStorage.setItem(
-      "@coffeehub:selectedCoffees",
-      JSON.stringify(selectedCoffees)
-    );
   }
 
   useEffect(() => {

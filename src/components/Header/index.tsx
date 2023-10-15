@@ -1,6 +1,6 @@
 import { MapPin, ShoppingCart } from "phosphor-react";
 import { Link } from "react-router-dom";
-import logoImg from "../../assets/logo.svg";
+import logoImg from "/logo.svg";
 import { Actions, Cart, CartCount, Location, Nav } from "./styles";
 import { useContext } from "react";
 import { CoffeesContext } from "../../contexts/CoffeeContext";

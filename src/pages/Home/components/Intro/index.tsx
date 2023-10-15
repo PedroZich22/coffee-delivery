@@ -1,5 +1,5 @@
 import { Coffee, Package, ShoppingCart, Timer } from "phosphor-react";
-import introImg from "../../../../assets/Imagem.png";
+import introImg from "/Imagem.png";
 import {
   IntroContainer,
   Item,
