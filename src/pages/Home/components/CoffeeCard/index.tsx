@@ -1,4 +1,4 @@
-import { ShoppingCartSimple } from "phosphor-react";
+import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import {
   BuyButton,
   BuyButtonContainer,
@@ -7,9 +7,12 @@ import {
   CoffeePrice,
   Tag,
   TagsContainer,
+  CounterContainer,
 } from "./styles";
-import { Counter } from "../../../../components/Counter";
-import { Link } from "react-router-dom";
+import { formatPrice } from "../../../../utils/format";
+import { useState } from "react";
+import { CartCoffee } from "../../../../types";
+import { useCart } from "../../../../contexts/CartContext";
 
 type CoffeeCardProps = {
   coffee: {
@@ -23,10 +26,33 @@ type CoffeeCardProps = {
 };
 
 export function CoffeeCard({ coffee }: CoffeeCardProps) {
-  const priceFormatted = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(coffee.price);
+  const { updateCoffeeAmount } = useCart();
+  const [selectedCoffees, setSelectedCoffees] = useState<CartCoffee>({
+    ...coffee,
+    amount: 0,
+  });
+
+  function handleAddCoffee() {
+    setSelectedCoffees({
+      ...selectedCoffees,
+      amount: selectedCoffees.amount + 1,
+    });
+  }
+
+  function handleRemoveCoffee() {
+    if (selectedCoffees.amount <= 0) return;
+    setSelectedCoffees({
+      ...selectedCoffees,
+      amount: selectedCoffees.amount - 1,
+    });
+  }
+
+  function handleUpdateCoffeeCart() {
+    updateCoffeeAmount({
+      coffeeId: selectedCoffees.id,
+      amount: selectedCoffees.amount,
+    });
+  }
 
   return (
     <CoffeeCardContainer>
@@ -40,15 +66,21 @@ export function CoffeeCard({ coffee }: CoffeeCardProps) {
       <p>{coffee.description}</p>
       <BuyContainer>
         <CoffeePrice>
-          <strong>{priceFormatted}</strong>
+          <strong>{formatPrice(coffee.price)}</strong>
         </CoffeePrice>
         <BuyButtonContainer>
-          <Counter coffee={coffee} />
-          <Link to="/checkout">
-            <BuyButton>
-              <ShoppingCartSimple size={22} weight="fill" />
-            </BuyButton>
-          </Link>
+          <CounterContainer>
+            <button onClick={() => handleRemoveCoffee()}>
+              <Minus weight="bold" />
+            </button>
+            <span>{selectedCoffees.amount}</span>
+            <button onClick={() => handleAddCoffee()}>
+              <Plus weight="bold" />
+            </button>
+          </CounterContainer>
+          <BuyButton onClick={() => handleUpdateCoffeeCart()}>
+            <ShoppingCartSimple size={22} weight="fill" />
+          </BuyButton>
         </BuyButtonContainer>
       </BuyContainer>
     </CoffeeCardContainer>

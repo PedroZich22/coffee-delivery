@@ -1,8 +1,5 @@
-import { Trash } from "phosphor-react";
-import { useContext, useState, useEffect } from "react";
+import { Minus, Plus, Trash } from "phosphor-react";
 import { Link } from "react-router-dom";
-import { Counter } from "../../../../components/Counter";
-import { CoffeesContext, Coffee } from "../../../../contexts/CoffeeContext";
 import {
   SelectedCoffee,
   SelectedCoffeeInfo,
@@ -15,87 +12,85 @@ import {
   PriceRowTotal,
   ConfirmButton,
 } from "./styles";
-
-interface SelectedCoffeeFiltered {
-  coffee: Coffee;
-  quantity: number;
-}
+import { useCart } from "../../../../contexts/CartContext";
+import { CounterContainer } from "../../../Home/components/CoffeeCard/styles";
+import { formatPrice } from "../../../../utils/format";
 
 interface SelectedCoffeesProps {
   isValid: boolean;
 }
 
+interface CartItemsAmount {
+  [key: number]: number;
+}
+
 export function SelectedCoffees({ isValid }: SelectedCoffeesProps) {
-  const { selectedCoffees, handleRemoveAllCoffeesFromCart, coffees } =
-    useContext(CoffeesContext);
+  const { cart, updateCoffeeAmount, removeCoffee } = useCart();
 
-  const selectedCoffeesFiltered: SelectedCoffeeFiltered[] =
-    selectedCoffees.reduce<SelectedCoffeeFiltered[]>((acc, coffee) => {
-      const coffeeExists = coffees.find(
-        (selectedCoffee) => selectedCoffee.id === coffee.id
-      );
+  const cartFiltered = cart.filter((coffee) => coffee.amount > 0);
 
-      if (coffeeExists) {
-        return [...acc, { coffee: coffeeExists, quantity: coffee.quantity }];
-      }
+  const cartItemsAmount = cart.reduce((sumAmount, product) => {
+    sumAmount[product.id] = product.amount;
+    return sumAmount;
+  }, {} as CartItemsAmount);
 
-      return acc;
-    }, []);
+  const total = formatPrice(
+    cart.reduce((sumTotal, product) => {
+      sumTotal += product.amount * product.price;
+      return sumTotal;
+    }, 0)
+  );
 
-  const [totalItems, setTotalItems] = useState("");
-  const [deliveryPrice] = useState(0);
-  const [totalPrice, setTotalPrice] = useState("");
+  function handleRemoveCoffee(coffeeId: number) {
+    const coffeeToAdd = cart.find((c) => c.id === coffeeId);
+    if (!coffeeToAdd) return;
 
-  function handleRemoveAllCoffees(id: number) {
-    handleRemoveAllCoffeesFromCart(id);
+    const newAmount = coffeeToAdd.amount - 1;
+    updateCoffeeAmount({ coffeeId, amount: newAmount });
   }
 
-  useEffect(() => {
-    const totalItemsPrice = selectedCoffeesFiltered.reduce(
-      (acc, coffee) => acc + coffee.coffee.price * coffee.quantity,
-      0
-    );
+  function handleAddCoffee(coffeeId: number) {
+    const coffeeToAdd = cart.find((c) => c.id === coffeeId);
+    if (!coffeeToAdd) return;
 
-    const totalPrice = totalItemsPrice + Number(deliveryPrice);
+    const newAmount = coffeeToAdd.amount + 1;
+    updateCoffeeAmount({ coffeeId, amount: newAmount });
+  }
 
-    const totalItemsPriceFormatted = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(totalItemsPrice);
+  function handleRemoveAllCoffees(coffeeId: number) {
+    removeCoffee(coffeeId);
+  }
 
-    const totalPriceFormatted = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(totalPrice);
-
-    setTotalItems(totalItemsPriceFormatted);
-    setTotalPrice(totalPriceFormatted);
-  }, [selectedCoffees, coffees, deliveryPrice, selectedCoffeesFiltered]);
-
-  if (selectedCoffees.length === 0) {
+  if (cartFiltered.length === 0)
     return (
       <h1>
         Você ainda não selecionou nenhum item, <Link to="/">clique aqui</Link>{" "}
         para ver os nossos produtos.
       </h1>
     );
-  }
 
   return (
     <>
-      {selectedCoffeesFiltered.map((selectedCoffee) => (
-        <>
-          <SelectedCoffee key={selectedCoffee.coffee.id}>
+      {cartFiltered.map((coffee) => (
+        <div key={coffee.id}>
+          <SelectedCoffee key={coffee.id}>
             <SelectedCoffeeInfo>
-              <img src={selectedCoffee.coffee.image} alt="" />
+              <img src={coffee.image} alt="" />
               <SelectedCoffeeDetails>
-                <span>{selectedCoffee.coffee.name}</span>
+                <span>{coffee.name}</span>
                 <SelectedCoffeeActions>
-                  <Counter coffee={selectedCoffee.coffee} />
+                  <CounterContainer>
+                    {" "}
+                    <button onClick={() => handleRemoveCoffee(coffee.id)}>
+                      <Minus weight="fill" />{" "}
+                    </button>
+                    <span>{cartItemsAmount[coffee.id]}</span>{" "}
+                    <button onClick={() => handleAddCoffee(coffee.id)}>
+                      <Plus weight="fill" />{" "}
+                    </button>{" "}
+                  </CounterContainer>
                   <RemoveCoffeeButton
-                    onClick={() =>
-                      handleRemoveAllCoffees(selectedCoffee.coffee.id)
-                    }
+                    onClick={() => handleRemoveAllCoffees(coffee.id)}
                   >
                     <Trash size={22} />
                     remover
@@ -104,29 +99,24 @@ export function SelectedCoffees({ isValid }: SelectedCoffeesProps) {
               </SelectedCoffeeDetails>
             </SelectedCoffeeInfo>
 
-            <strong>
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(selectedCoffee.coffee.price * selectedCoffee.quantity)}
-            </strong>
+            <strong>{formatPrice(coffee.price)}</strong>
           </SelectedCoffee>
           <Divider />
-        </>
+        </div>
       ))}
 
       <PriceContainer>
         <PriceRow>
           <span>Total de itens</span>
-          <strong>{totalItems}</strong>
+          <strong>{total}</strong>
         </PriceRow>
         <PriceRow>
           <span>Entrega</span>
-          <strong>{deliveryPrice}</strong>
+          <strong>{0}</strong>
         </PriceRow>
         <PriceRowTotal>
           <span>Total</span>
-          <strong>{totalPrice}</strong>
+          <strong>{total}</strong>
         </PriceRowTotal>
 
         <ConfirmButton disabled={isValid} form="checkout-form" type="submit">

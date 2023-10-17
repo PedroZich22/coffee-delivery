@@ -2,11 +2,17 @@ import { MapPin, ShoppingCart } from "phosphor-react";
 import { Link } from "react-router-dom";
 import logoImg from "/logo.svg";
 import { Actions, Cart, CartCount, Location, Nav } from "./styles";
-import { useContext } from "react";
-import { CoffeesContext } from "../../contexts/CoffeeContext";
+import { useCart } from "../../contexts/CartContext";
 
 export function Header() {
-  const { quantity } = useContext(CoffeesContext);
+  const { cart } = useCart();
+
+  const cartSize = cart.reduce((acc, product) => {
+    if (!acc.includes(product.id)) {
+      acc.push(product.id);
+    }
+    return acc;
+  }, [] as number[]).length;
 
   return (
     <Nav>
@@ -20,7 +26,7 @@ export function Header() {
         </Location>
         <Link to="/checkout">
           <Cart>
-            {quantity > 0 && <CartCount>{quantity}</CartCount>}
+            {cartSize > 0 && <CartCount>{cartSize}</CartCount>}
             <ShoppingCart size={22} weight="fill" />
           </Cart>
         </Link>
